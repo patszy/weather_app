@@ -7,9 +7,9 @@ const City = props => {
 
     if(!error && cityName) {
         content = (
-            <div>
+            <React.Fragment>
                 <div className="location-box">
-                    <h2 className="location">{cityName}</h2>
+                    <h2 className="location">{cityName}, {weatherData.sys.country}</h2>
                     <p className="date">{date}</p>
                 </div>
                 <div className="weather-box">
@@ -17,7 +17,7 @@ const City = props => {
                     <p className="pressure">{weatherData.main.pressure} hPa</p>
                 </div>
                 <p className="desc">{weatherData.weather[0].main}</p>
-            </div>
+            </React.Fragment>
         )
     }
 

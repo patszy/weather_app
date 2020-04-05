@@ -62,7 +62,6 @@ html, body, #root {
   font-size: 1rem;
   font-style: italic;
   text-align: center;
-  text-shadow: 2px 2px rgba(50, 50, 70, 0.5);
 }
 
 .weather-box {
@@ -81,6 +80,7 @@ html, body, #root {
   display: inline-block;
   margin: auto;
   font-weight: bold;
+  width: 100%;
 }
 
 .weather-box .temp {
