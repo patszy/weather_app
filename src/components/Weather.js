@@ -1,75 +1,53 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import SelectCity from './SelectCity';
 import City from './City';
 
-//Key to API;
-const APIKey = 'b6907d289e10d714a6e88b30761fae22';
+const Weather = () => {
 
-const todayDate = d => {
-    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const [inputValue, setInputValue] = useState('');
+    const [weatherData, setWeatherData] = useState({});
+    const [date, setDate] = useState('');
+    const [error, setError] = useState(false);
 
-    let day = days[d.getDay()];
-    let date = d.getDate();
-    let month = months[d.getMonth()];
-    let year = d.getFullYear();
-
-    return `${day} ${date} ${month} ${year}`
-}
-
-class Weather extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            inputValue: '',
-            cityName: '',
-            date: '',
-            weatherData: '',
-            error: false
-        }
+    const api = {
+        key: 'b6907d289e10d714a6e88b30761fae22',
+        baseUrl: `https://openweathermap.org/data/2.5/`
     }
 
-    handleInputChange = event => {
-        this.setState({
-            inputValue: event.target.value
-        });
-    }
-
-    handleCitySubmit = event => {
+    const handleCitySubmit = event => {
         event.preventDefault();
-        const baseUrl = `https://openweathermap.org/data/2.5/weather?q=${this.state.inputValue}&appid=${APIKey}&units=metric`;
 
-        fetch(baseUrl)
+        fetch(`${api.baseUrl}weather?q=${inputValue}&appid=${api.key}&units=metric`)
         .then(response => {
             if(response.ok) return response;
-            throw Error("Wrong City Name");
+            else throw Error("Wrong City Name");
         })
         .then(response => response.json())
         .then(data => {
-            this.setState(prevState => ({
-                error: false,
-                cityName: prevState.inputValue,
-                date: todayDate(new Date()),
-                weatherData: data
-            }))
+            todayDate(new Date());
+            setWeatherData(data);
+            setError(false);
         })
-        .catch(error => {
-            console.log(error);
-            this.setState(prevState => ({
-                error: true,
-                cityName: prevState.inputValue
-            }))
-        });
+        .catch( setError(true) );
     }
 
-    render() {
-        return (
-            <div className='weather'>
-                <SelectCity cityName={this.state.cityName} getInputValue={this.handleInputChange} submit={this.handleCitySubmit} />
-                <City weather={this.state} />
-            </div>
-        );
+    const todayDate = d => {
+        let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+        let day = days[d.getDay()];
+        let date = d.getDate();
+        let month = months[d.getMonth()];
+        let year = d.getFullYear();
+
+        return setDate(`${day} ${date} ${month} ${year}`);
     }
+
+    return (
+        <div className='weather'>
+            <SelectCity setInputValue={setInputValue} submit={handleCitySubmit} />
+            <City props={error, inputValue, weatherData, date}/>
+        </div>
+    );
 }
 export default Weather;

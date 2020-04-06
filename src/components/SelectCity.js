@@ -7,7 +7,7 @@ const SelectCity = props => {
                 type="text"
                 className="search-bar"
                 value={props.inputValue}
-                onChange={props.getInputValue}
+                onChange={e=>props.setInputValue(e.target.value)}
                 placeholder="Search city..."
             />
         </form>
